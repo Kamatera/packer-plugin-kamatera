@@ -10,9 +10,9 @@ import (
 	"packer-plugin-kamatera/httpclient"
 )
 
-type stepPowerOffServer struct {}
+type stepPowerOffServer struct{}
 
-func (s *stepPowerOffServer) Run(ctx context.Context, state multistep.StateBag) multistep.StepAction  {
+func (s *stepPowerOffServer) Run(ctx context.Context, state multistep.StateBag) multistep.StepAction {
 	kamateraClient := state.Get("kamateraClient").(*httpclient.Kamatera)
 
 	ui := state.Get("ui").(packersdk.Ui)
@@ -43,6 +43,6 @@ func (s *stepPowerOffServer) Run(ctx context.Context, state multistep.StateBag) 
 	return multistep.ActionContinue
 }
 
-func (s *stepPowerOffServer) Cleanup(state multistep.StateBag)  {
+func (s *stepPowerOffServer) Cleanup(state multistep.StateBag) {
 
 }

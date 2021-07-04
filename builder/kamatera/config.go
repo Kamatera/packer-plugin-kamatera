@@ -30,10 +30,10 @@ type Config struct {
 
 	ServerName string `mapstructure:"server_name"`
 	Datacenter string `mapstructure:"datacenter"`
-	CPU string `mapstructure:"cpu"`
-	RAM string `mapstructure:"ram"`
-	Image string `mapstructure:"image"`
-	Password string `mapstructure:"password"`
+	CPU        string `mapstructure:"cpu"`
+	RAM        string `mapstructure:"ram"`
+	Image      string `mapstructure:"image"`
+	Password   string `mapstructure:"password"`
 
 	SnapshotName string `mapstructure:"snapshot_name"`
 

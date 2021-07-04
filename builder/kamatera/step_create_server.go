@@ -71,19 +71,19 @@ func (s *stepCreateServer) Run(ctx context.Context, state multistep.StateBag) mu
 	ui.Say("Creating server...")
 
 	values := createServerPostValues{
-		Name:             c.ServerName,
-		SSHKey:           pubKey,
-		Datacenter:       c.Datacenter,
-		Image:            c.Image,
-		CPU:              c.CPU,
-		RAM:              c.RAM,
-		Disk:             defaultServerOption.Disk,
-		DailyBackup:      defaultServerOption.DailyBackup,
-		Managed:          defaultServerOption.Managed,
-		Network:          defaultServerOption.Network,
-		Quantity:         defaultServerOption.Quantity,
-		BillingCycle:     defaultServerOption.BillingCycle,
-		MonthlyPackage:   defaultServerOption.MonthlyPackage,
+		Name:           c.ServerName,
+		SSHKey:         pubKey,
+		Datacenter:     c.Datacenter,
+		Image:          c.Image,
+		CPU:            c.CPU,
+		RAM:            c.RAM,
+		Disk:           defaultServerOption.Disk,
+		DailyBackup:    defaultServerOption.DailyBackup,
+		Managed:        defaultServerOption.Managed,
+		Network:        defaultServerOption.Network,
+		Quantity:       defaultServerOption.Quantity,
+		BillingCycle:   defaultServerOption.BillingCycle,
+		MonthlyPackage: defaultServerOption.MonthlyPackage,
 	}
 
 	result, err := kamateraClient.Request("POST", "service/server", values)
@@ -136,7 +136,7 @@ func (s *stepCreateServer) Run(ctx context.Context, state multistep.StateBag) mu
 		return multistep.ActionHalt
 	}
 
-	if  c.ServerName!= createdServerName {
+	if c.ServerName != createdServerName {
 		err := fmt.Errorf("different server name, expect %s, got %s", c.ServerName, createdServerName)
 		state.Put("error", err)
 		ui.Error(err.Error())
@@ -180,8 +180,8 @@ func (s *stepCreateServer) Cleanup(state multistep.StateBag) {
 	// Destroy the server we just created
 	ui.Say("Destroying server...")
 	result, err := kamateraClient.Request("POST", "service/server/terminate", struct {
-		Name string `json:"name"`
-		Force bool `json:"force"`
+		Name  string `json:"name"`
+		Force bool   `json:"force"`
 	}{
 		c.ServerName,
 		true,
@@ -198,4 +198,3 @@ func (s *stepCreateServer) Cleanup(state multistep.StateBag) {
 			"Error destroying server. Please destroy it manually: %s", err))
 	}
 }
-
