@@ -1,7 +1,7 @@
 # Packer Plugin Scaffolding
 
 This repository is a template for a Packer multi-component plugin. It is intended as a starting point for creating Packer plugins, containing:
-- A builder ([builder/scaffolding](builder/scaffolding))
+- A builder ([builder/scaffolding](builder/kamatera))
 - A provisioner ([provisioner/scaffolding](provisioner/scaffolding))
 - A post-processor ([post-processor/scaffolding](provisioner/scaffolding))
 - A data source ([datasource/scaffolding](datasource/scaffolding))
