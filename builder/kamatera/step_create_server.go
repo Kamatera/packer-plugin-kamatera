@@ -68,7 +68,7 @@ func (s *stepCreateServer) Run(ctx context.Context, state multistep.StateBag) mu
 	pubKey := state.Get("public_key").(string)
 
 	// Create the server based on configuration
-	ui.Say("Creating server...")
+	ui.Say("Creating server ...")
 
 	values := createServerPostValues{
 		Name:             c.ServerName,
@@ -87,7 +87,6 @@ func (s *stepCreateServer) Run(ctx context.Context, state multistep.StateBag) mu
 		BillingCycle:     defaultServerOption.BillingCycle,
 		MonthlyPackage:   defaultServerOption.MonthlyPackage,
 	}
-	ui.Say(fmt.Sprintf("%+v", values))
 
 	result, err := kamateraClient.Request("POST", "service/server", values)
 	if err != nil {
@@ -184,7 +183,6 @@ func (s *stepCreateServer) Run(ctx context.Context, state multistep.StateBag) mu
 		return multistep.ActionHalt
 	}
 	server := servers[0].(map[string]interface{})
-	ui.Say(fmt.Sprintf("%+v", server))
 	state.Put("server_ip", server["ips"].([]interface{})[0].(string))
 
 	return multistep.ActionContinue
@@ -212,6 +210,7 @@ func (s *stepCreateServer) Cleanup(state multistep.StateBag) {
 	if err != nil {
 		ui.Error(fmt.Sprintf(
 			"Error destroying server. Please destroy it manually: %s", err))
+		return
 	}
 
 	commandIds := result.([]interface{})

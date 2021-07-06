@@ -71,12 +71,12 @@ func (b *Builder) Run(ctx context.Context, ui packersdk.Ui, hook packersdk.Hook)
 		return nil, rawErr.(error)
 	}
 
-	if _, ok := state.GetOk("snapshot_name"); !ok {
+	if _, ok := state.GetOk("snapshot_uuid"); !ok {
 		return nil, nil
 	}
 
 	artifact := &Artifact{
-		snapshotName: state.Get("snapshot_name").(string),
+		snapshotUUID: state.Get("snapshot_uuid").(string),
 		StateData:    map[string]interface{}{"generated_data": state.Get("generated_data")},
 	}
 

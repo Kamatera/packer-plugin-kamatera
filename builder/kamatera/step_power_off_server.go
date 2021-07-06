@@ -21,7 +21,7 @@ func (s *stepPowerOffServer) Run(ctx context.Context, state multistep.StateBag) 
 
 	serverName := state.Get("server_name").(string)
 
-	result, err := kamateraClient.Request("POST", "service/server/terminate", struct {
+	result, err := kamateraClient.Request("POST", "service/server/poweroff", struct {
 		Name string `json:"name"`
 	}{
 		serverName,
