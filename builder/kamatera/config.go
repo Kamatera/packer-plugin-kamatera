@@ -6,6 +6,7 @@ import (
 	"errors"
 	"fmt"
 	"os"
+	"strings"
 	"time"
 
 	"github.com/hashicorp/packer-plugin-sdk/common"
@@ -86,7 +87,7 @@ func (c *Config) Prepare(raws ...interface{}) ([]string, error) {
 
 	if c.ServerName == "" {
 		// Default to packer-[time-ordered-uuid]
-		c.ServerName = fmt.Sprintf("packer-%s", uuid.TimeOrderedUUID())
+		c.ServerName = fmt.Sprintf("packer_%s", strings.Replace(uuid.TimeOrderedUUID(), "-", "_", -1))
 	}
 
 	var errs *packersdk.MultiError

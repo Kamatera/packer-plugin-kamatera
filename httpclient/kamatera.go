@@ -29,7 +29,7 @@ func (k *Kamatera) Request(method string, path string, body interface{}) (interf
 	buf := new(bytes.Buffer)
 	if body != nil {
 		if err := json.NewEncoder(buf).Encode(body); err != nil {
-			return nil, err
+			return nil, fmt.Errorf("cannot encode body %+v", err)
 		}
 	}
 
@@ -42,7 +42,7 @@ func (k *Kamatera) Request(method string, path string, body interface{}) (interf
 	client := cleanhttp.DefaultClient()
 	res, err := client.Do(req)
 	if err != nil {
-		return nil, err
+		return nil, fmt.Errorf("error when doing http request %+v", err)
 	}
 	defer res.Body.Close()
 
