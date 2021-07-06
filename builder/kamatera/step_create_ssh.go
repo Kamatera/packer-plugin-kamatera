@@ -21,9 +21,10 @@ type stepCreateSSHKey struct {
 }
 
 func (s *stepCreateSSHKey) Run(ctx context.Context, state multistep.StateBag) multistep.StepAction {
+	c := state.Get("config").(*Config)
 	ui := state.Get("ui").(packersdk.Ui)
 
-	privKey, pubKey, err := MakeSSHKeyPair()
+	pubKey, privKey, err := MakeSSHKeyPair()
 	if err != nil {
 		state.Put("error", err)
 		ui.Error(err.Error())
@@ -31,6 +32,8 @@ func (s *stepCreateSSHKey) Run(ctx context.Context, state multistep.StateBag) mu
 	}
 	state.Put("private_key", privKey)
 	state.Put("public_key", pubKey)
+
+	c.Comm.SSHPrivateKey = []byte(privKey)
 
 	return multistep.ActionContinue
 }

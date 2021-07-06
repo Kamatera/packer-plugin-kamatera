@@ -87,6 +87,7 @@ func (s *stepCreateServer) Run(ctx context.Context, state multistep.StateBag) mu
 		BillingCycle:     defaultServerOption.BillingCycle,
 		MonthlyPackage:   defaultServerOption.MonthlyPackage,
 	}
+	ui.Say(fmt.Sprintf("%+v", values))
 
 	result, err := kamateraClient.Request("POST", "service/server", values)
 	if err != nil {
@@ -94,7 +95,7 @@ func (s *stepCreateServer) Run(ctx context.Context, state multistep.StateBag) mu
 		ui.Error(err.Error())
 		return multistep.ActionHalt
 	}
-	ui.Say("posted new server")
+	ui.Say("Waiting creation ...")
 
 	var commandIDs []interface{}
 	if r, ok := result.([]interface{}); ok {
@@ -112,7 +113,6 @@ func (s *stepCreateServer) Run(ctx context.Context, state multistep.StateBag) mu
 	}
 
 	commandID := commandIDs[0].(string)
-	ui.Say(commandID)
 	command, err := kamateraClient.WaitCommand(commandID)
 	if err != nil {
 		state.Put("error", err)
@@ -146,7 +146,27 @@ func (s *stepCreateServer) Run(ctx context.Context, state multistep.StateBag) mu
 	}
 	state.Put("server_name", createdServerName)
 
-	result, err = kamateraClient.Request("POST", "service/server/ssh", struct {
+	//result, err = kamateraClient.Request("POST", "service/server/ssh", struct {
+	//	Name string `json:"name"`
+	//}{
+	//	createdServerName,
+	//})
+	//if err != nil {
+	//	state.Put("error", err)
+	//	ui.Error(err.Error())
+	//	return multistep.ActionHalt
+	//}
+	//servers := result.([]interface{})
+	//if len(servers) != 1 {
+	//	err := fmt.Errorf("wrong number of server, got %v", len(servers))
+	//	state.Put("error", err)
+	//	ui.Error(err.Error())
+	//	return multistep.ActionHalt
+	//}
+	//server := servers[0].(map[string]interface{})
+	//state.Put("server_ip", server["externalIp"].(string))
+
+	result, err = kamateraClient.Request("POST", "server/network", struct {
 		Name string `json:"name"`
 	}{
 		createdServerName,
@@ -164,7 +184,8 @@ func (s *stepCreateServer) Run(ctx context.Context, state multistep.StateBag) mu
 		return multistep.ActionHalt
 	}
 	server := servers[0].(map[string]interface{})
-	state.Put("server_ip", server["externalIp"].(string))
+	ui.Say(fmt.Sprintf("%+v", server))
+	state.Put("server_ip", server["ips"].([]interface{})[0].(string))
 
 	return multistep.ActionContinue
 }
