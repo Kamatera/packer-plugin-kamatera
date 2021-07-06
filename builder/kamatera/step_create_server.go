@@ -71,19 +71,21 @@ func (s *stepCreateServer) Run(ctx context.Context, state multistep.StateBag) mu
 	ui.Say("Creating server...")
 
 	values := createServerPostValues{
-		Name:           c.ServerName,
-		SSHKey:         pubKey,
-		Datacenter:     c.Datacenter,
-		Image:          c.Image,
-		CPU:            c.CPU,
-		RAM:            c.RAM,
-		Disk:           defaultServerOption.Disk,
-		DailyBackup:    defaultServerOption.DailyBackup,
-		Managed:        defaultServerOption.Managed,
-		Network:        defaultServerOption.Network,
-		Quantity:       defaultServerOption.Quantity,
-		BillingCycle:   defaultServerOption.BillingCycle,
-		MonthlyPackage: defaultServerOption.MonthlyPackage,
+		Name:             c.ServerName,
+		SSHKey:           pubKey,
+		Datacenter:       c.Datacenter,
+		Image:            c.Image,
+		CPU:              c.CPU,
+		RAM:              c.RAM,
+		Password:         c.Password,
+		PasswordValidate: c.Password,
+		Disk:             defaultServerOption.Disk,
+		DailyBackup:      defaultServerOption.DailyBackup,
+		Managed:          defaultServerOption.Managed,
+		Network:          defaultServerOption.Network,
+		Quantity:         defaultServerOption.Quantity,
+		BillingCycle:     defaultServerOption.BillingCycle,
+		MonthlyPackage:   defaultServerOption.MonthlyPackage,
 	}
 
 	result, err := kamateraClient.Request("POST", "service/server", values)
@@ -92,14 +94,16 @@ func (s *stepCreateServer) Run(ctx context.Context, state multistep.StateBag) mu
 		ui.Error(err.Error())
 		return multistep.ActionHalt
 	}
+	ui.Say("posted new server")
 
 	var commandIDs []interface{}
-	if c.Password == "__generate__" {
+	if r, ok := result.([]interface{}); ok {
+		commandIDs = r
+	} else {
 		response := result.(map[string]interface{})
 		commandIDs = response["commandIds"].([]interface{})
-	} else {
-		commandIDs = result.([]interface{})
 	}
+
 	if len(commandIDs) != 1 {
 		err := errors.New("invalid response from Kamatera API: did not return expected command ID")
 		state.Put("error", err)
@@ -108,6 +112,7 @@ func (s *stepCreateServer) Run(ctx context.Context, state multistep.StateBag) mu
 	}
 
 	commandID := commandIDs[0].(string)
+	ui.Say(commandID)
 	command, err := kamateraClient.WaitCommand(commandID)
 	if err != nil {
 		state.Put("error", err)
@@ -137,11 +142,9 @@ func (s *stepCreateServer) Run(ctx context.Context, state multistep.StateBag) mu
 	}
 
 	if c.ServerName != createdServerName {
-		err := fmt.Errorf("different server name, expect %s, got %s", c.ServerName, createdServerName)
-		state.Put("error", err)
-		ui.Error(err.Error())
-		return multistep.ActionHalt
+		ui.Say(fmt.Sprintf("different server created by cloud provider, expected %v, got %v", c.ServerName, createdServerName))
 	}
+	state.Put("server_name", createdServerName)
 
 	result, err = kamateraClient.Request("POST", "service/server/ssh", struct {
 		Name string `json:"name"`
@@ -167,9 +170,8 @@ func (s *stepCreateServer) Run(ctx context.Context, state multistep.StateBag) mu
 }
 
 func (s *stepCreateServer) Cleanup(state multistep.StateBag) {
-	c := state.Get("config").(*Config)
-
-	if c.ServerName == "" {
+	serverName := state.Get("server_name")
+	if _, ok := serverName.(string); !ok {
 		return
 	}
 
@@ -183,7 +185,7 @@ func (s *stepCreateServer) Cleanup(state multistep.StateBag) {
 		Name  string `json:"name"`
 		Force bool   `json:"force"`
 	}{
-		c.ServerName,
+		serverName.(string),
 		true,
 	})
 	if err != nil {

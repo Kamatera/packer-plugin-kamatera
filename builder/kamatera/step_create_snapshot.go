@@ -25,7 +25,7 @@ func (s *stepCreateSnapshot) Run(ctx context.Context, state multistep.StateBag) 
 		Clone     string `json:"clone"`
 		ImageName string `json:"image_name"`
 	}{
-		c.ServerName,
+		state.Get("server_name").(string),
 		state.Get("hduuid").(string),
 		c.SnapshotName,
 	})

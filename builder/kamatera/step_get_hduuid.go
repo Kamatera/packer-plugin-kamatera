@@ -16,14 +16,13 @@ func (s *stepGetHduuid) Run(ctx context.Context, state multistep.StateBag) multi
 	kamateraClient := state.Get("kamateraClient").(*httpclient.Kamatera)
 
 	ui := state.Get("ui").(packersdk.Ui)
-	c := state.Get("config").(*Config)
 
 	ui.Say("Getting hduuid ...")
 
 	response, err := kamateraClient.Request("POST", "server/hdlib", struct {
 		Name string `json:"name"`
 	}{
-		c.ServerName,
+		state.Get("server_name").(string),
 	})
 	if err != nil {
 		state.Put("error", err)
