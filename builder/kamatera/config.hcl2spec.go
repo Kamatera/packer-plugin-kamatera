@@ -77,6 +77,7 @@ type FlatConfig struct {
 	RAM                       *string           `mapstructure:"ram" cty:"ram" hcl:"ram"`
 	Image                     *string           `mapstructure:"image" cty:"image" hcl:"image"`
 	Password                  *string           `mapstructure:"password" cty:"password" hcl:"password"`
+	Disk                      *string           `mapstructure:"disk" cty:"disk" hcl:"disk"`
 	SnapshotName              *string           `mapstructure:"snapshot_name" cty:"snapshot_name" hcl:"snapshot_name"`
 }
 
@@ -159,6 +160,7 @@ func (*FlatConfig) HCL2Spec() map[string]hcldec.Spec {
 		"ram":                          &hcldec.AttrSpec{Name: "ram", Type: cty.String, Required: false},
 		"image":                        &hcldec.AttrSpec{Name: "image", Type: cty.String, Required: false},
 		"password":                     &hcldec.AttrSpec{Name: "password", Type: cty.String, Required: false},
+		"disk":                         &hcldec.AttrSpec{Name: "disk", Type: cty.String, Required: false},
 		"snapshot_name":                &hcldec.AttrSpec{Name: "snapshot_name", Type: cty.String, Required: false},
 	}
 	return s

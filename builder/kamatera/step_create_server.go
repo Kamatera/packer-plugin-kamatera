@@ -79,7 +79,7 @@ func (s *stepCreateServer) Run(ctx context.Context, state multistep.StateBag) mu
 		RAM:              c.RAM,
 		Password:         c.Password,
 		PasswordValidate: c.Password,
-		Disk:             defaultServerOption.Disk,
+		Disk:             c.Disk,
 		DailyBackup:      defaultServerOption.DailyBackup,
 		Managed:          defaultServerOption.Managed,
 		Network:          defaultServerOption.Network,
