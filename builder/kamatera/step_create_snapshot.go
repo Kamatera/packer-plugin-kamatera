@@ -50,26 +50,8 @@ func (s *stepCreateSnapshot) Run(ctx context.Context, state multistep.StateBag) 
 		return multistep.ActionHalt
 	}
 
-	res, err = kamateraClient.Request("POST", "server/hdlib", struct {
-		Name      string `json:"name"`
-		Clone     string `json:"clone"`
-		ImageName string `json:"image_name"`
-	}{
-		state.Get("server_name").(string),
-		state.Get("hduuid").(string),
-		c.SnapshotName,
-	})
-	if err != nil {
-		state.Put("error", err)
-		ui.Error(err.Error())
-		return multistep.ActionHalt
-	}
-
-	result := res.(map[string]interface{})
-	snapshotUUID := result["uuid"].(string)
-
-	ui.Say(fmt.Sprintf("snapshot: %s", snapshotUUID))
-	state.Put("snapshot_uuid", snapshotUUID)
+	ui.Say(fmt.Sprintf("snapshot: %s", c.SnapshotName))
+	state.Put("snapshot_name", c.SnapshotName)
 
 	return multistep.ActionContinue
 }

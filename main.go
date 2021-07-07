@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"os"
+
 	"packer-plugin-kamatera/builder/kamatera"
 	"packer-plugin-kamatera/version"
 
@@ -11,7 +12,7 @@ import (
 
 func main() {
 	pps := plugin.NewSet()
-	pps.RegisterBuilder("kamatera-builder", new(kamatera.Builder))
+	pps.RegisterBuilder(plugin.DEFAULT_NAME, new(kamatera.Builder))
 	pps.SetVersion(version.PluginVersion)
 	err := pps.Run()
 	if err != nil {

@@ -5,9 +5,8 @@ import (
 	"log"
 )
 
-// packersdk.Artifact implementation
 type Artifact struct {
-	snapshotUUID string
+	snapshotName string
 
 	// StateData should store data such as GeneratedData
 	// to be shared with post-processors
@@ -23,11 +22,11 @@ func (*Artifact) Files() []string {
 }
 
 func (a *Artifact) Id() string {
-	return a.snapshotUUID
+	return a.snapshotName
 }
 
 func (a *Artifact) String() string {
-	return fmt.Sprintf("A snapshot was created: '%v'", a.snapshotUUID)
+	return fmt.Sprintf("A snapshot was created: '%v'", a.snapshotName)
 }
 
 func (a *Artifact) State(name string) interface{} {
@@ -35,7 +34,7 @@ func (a *Artifact) State(name string) interface{} {
 }
 
 func (a *Artifact) Destroy() error {
-	log.Printf("Destroying image: %s", a.snapshotUUID)
+	log.Printf("Destroying image: %s", a.snapshotName)
 	// TODO: implement
 	//_, err := a.hcloudClient.Image.Delete(context.TODO(), &hcloud.Image{ID: a.snapshotId})
 	return nil
