@@ -24,10 +24,6 @@ Run `packer init` to install the plugin.
 
 ## Configuration Reference
 
-There are many configuration options available for the builder. They are
-segmented below into two categories: required and optional parameters. Within
-each category, the available configuration keys are alphabetized.
-
 ### Required Builder Configuration options:
 
 - `api_secret` (string) - The Kamatera API secret to use. It can also be specified via environment variable `KAMATERA_API_SECRET`.
