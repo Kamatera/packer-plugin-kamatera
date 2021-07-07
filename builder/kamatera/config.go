@@ -34,6 +34,7 @@ type Config struct {
 	RAM        string `mapstructure:"ram"`
 	Image      string `mapstructure:"image"`
 	Password   string `mapstructure:"password"`
+	Disk       string `mapstructure:"disk"`
 
 	SnapshotName string `mapstructure:"snapshot_name"`
 
@@ -120,6 +121,11 @@ func (c *Config) Prepare(raws ...interface{}) ([]string, error) {
 	}
 	if c.Password == "" {
 		c.Password = "__generate__"
+	}
+	if c.Disk == "" {
+		c.Disk = defaultServerOption.Disk
+	} else {
+		c.Disk = fmt.Sprintf("size=%s", c.Disk)
 	}
 
 	if errs != nil && len(errs.Errors) > 0 {
