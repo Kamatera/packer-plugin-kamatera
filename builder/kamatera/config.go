@@ -124,6 +124,8 @@ func (c *Config) Prepare(raws ...interface{}) ([]string, error) {
 	}
 	if c.Disk == "" {
 		c.Disk = defaultServerOption.Disk
+	} else {
+		c.Disk = fmt.Sprintf("size=%s", c.Disk)
 	}
 
 	if errs != nil && len(errs.Errors) > 0 {
