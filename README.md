@@ -13,7 +13,7 @@ Add the following code into your Packer configuration file:
 packer {
   required_plugins {
     kamatera = {
-      version = ">= 0.1.5"
+      version = ">= 0.1.6"
       source  = "github.com/kamatera/kamatera"
     }
   }
@@ -33,14 +33,11 @@ Run `packer init` to install the plugin.
 
 ### Optional:
 
+- `snapshot_name` (string) - The name of the resulting image that will appear in your Kamatera hard disk library. Defaults to `packer-{{timestamp}}`.
 - `cpu` (string) - The cpu assigned to the server. Default to `1A`.
 - `ram` (string) - The ram assigned to the server. Default to `1024`.
 - `image` (string) - The image used by the server. Default to `ubuntu_server_18.04_64-bit`.
 - `disk` (string) - The disk size in GB assigned to the server. Default to `10`.
-<!--
-doesn't work at the moment, uncomment once it's fixed
-- `snapshot_name` (string) - The name of the resulting image that will appear in your Kamatera hard disk library. Defaults to `packer-{{timestamp}}`.
--->
 
 ## Known Issues
 
@@ -61,7 +58,7 @@ Create a new directory named `packer_tutorial` and paste the following configura
 packer {
   required_plugins {
     kamatera = {
-      version = ">= 0.1.5"
+      version = ">= 0.1.6"
       source  = "github.com/kamatera/kamatera"
     }
   }
@@ -70,6 +67,7 @@ packer {
 source "kamatera" "ubuntu" {
   datacenter = "EU"
   ssh_username = "root"
+  snapshot_name = "ubuntu-example-packer-image"
 }
 
 build {
