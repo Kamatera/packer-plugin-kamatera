@@ -39,10 +39,6 @@ Run `packer init` to install the plugin.
 - `image` (string) - The image used by the server. Default to `ubuntu_server_18.04_64-bit`.
 - `disk` (string) - The disk size in GB assigned to the server. Default to `10`.
 
-## Known Issues
-
-* Not possible to set the image name ([#12](https://github.com/Kamatera/packer-plugin-kamatera/issues/12))
-
 ## Tutorial
 
 Set environment variables with your Kamatera API key (you can generate an API key from the [Kamatera console]() -> API -> Keys):
