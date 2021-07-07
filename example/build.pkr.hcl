@@ -19,7 +19,7 @@ source "kamatera" "test" {
   //  ram = "1024"
   //  image = "ubuntu_server_18.04_64-bit"
   //  password = "__generate__"
-  //  image_name
+  //  snapshot_name =
 }
 
 build {
