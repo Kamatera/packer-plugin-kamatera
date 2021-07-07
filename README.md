@@ -70,7 +70,7 @@ each category, the available configuration keys are alphabetized.
 - `ram` (string) - The ram assigned to the server. Default to `1024`.
 - `image` (string) - The image used by the server. Default to `ubuntu_server_18.04_64-bit`.
 - `password` (string) - The password assigned to the server. Default to `__generate__`.
-- `disk` (string) - The disk assigned to the server. Default to `size=10`.
+- `disk` (string) - The disk assigned to the server. Default to `10`.
 - `snapshot_name` (string) - The name of the resulting snapshot that will appear in your account as image description. Defaults to `packer-{{timestamp}}`.
 
 
