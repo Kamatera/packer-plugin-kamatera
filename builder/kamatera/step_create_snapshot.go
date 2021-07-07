@@ -25,7 +25,7 @@ func (s *stepCreateSnapshot) Run(ctx context.Context, state multistep.StateBag) 
 	res, err := kamateraClient.Request("POST", "server/hdlib", struct {
 		Name      string `json:"name"`
 		Clone     string `json:"clone"`
-		ImageName string `json:"image_name"`
+		ImageName string `json:"image-name"`
 	}{
 		state.Get("server_name").(string),
 		state.Get("hduuid").(string),
