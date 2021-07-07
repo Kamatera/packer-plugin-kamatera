@@ -8,8 +8,8 @@
 //}
 
 source "kamatera" "test" {
-  api_client_id = "d66f959d724b45bddad8750b5fd5e728"
-  api_secret = "f0396ba3b682e764594668aae6cfc524"
+  # api_client_id = ""
+  # api_secret = ""
 
   ssh_username = "root"
 
