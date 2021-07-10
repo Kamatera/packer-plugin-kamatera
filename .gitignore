@@ -3,3 +3,6 @@ dist/*
 packer-plugin-scaffolding
 *.log
 .idea
+
+
+.envrc

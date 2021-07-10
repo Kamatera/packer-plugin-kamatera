@@ -145,27 +145,7 @@ func (s *stepCreateServer) Run(ctx context.Context, state multistep.StateBag) mu
 
 	state.Put("server_name", createdServerName)
 
-	//result, err = kamateraClient.Request("POST", "service/server/ssh", struct {
-	//	Name string `json:"name"`
-	//}{
-	//	createdServerName,
-	//})
-	//if err != nil {
-	//	state.Put("error", err)
-	//	ui.Error(err.Error())
-	//	return multistep.ActionHalt
-	//}
-	//servers := result.([]interface{})
-	//if len(servers) != 1 {
-	//	err := fmt.Errorf("wrong number of server, got %v", len(servers))
-	//	state.Put("error", err)
-	//	ui.Error(err.Error())
-	//	return multistep.ActionHalt
-	//}
-	//server := servers[0].(map[string]interface{})
-	//state.Put("server_ip", server["externalIp"].(string))
-
-	result, err = kamateraClient.Request("POST", "server/network", struct {
+	result, err = kamateraClient.Request("POST", "service/server/ssh", struct {
 		Name string `json:"name"`
 	}{
 		createdServerName,
@@ -183,7 +163,7 @@ func (s *stepCreateServer) Run(ctx context.Context, state multistep.StateBag) mu
 		return multistep.ActionHalt
 	}
 	server := servers[0].(map[string]interface{})
-	state.Put("server_ip", server["ips"].([]interface{})[0].(string))
+	state.Put("server_ip", server["externalIp"].(string))
 
 	return multistep.ActionContinue
 }

@@ -13,7 +13,7 @@ source "kamatera" "test" {
 
   ssh_username = "root"
 
-  //  datacenter = "IL"
+  datacenter = "IL"
   //  cpu = "1A"
   //  ram = "1024"
   //  image = "ubuntu_server_18.04_64-bit"
