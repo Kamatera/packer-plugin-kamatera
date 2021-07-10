@@ -18,6 +18,7 @@ func (*Artifact) BuilderId() string {
 }
 
 func (*Artifact) Files() []string {
+	log.Fatal("Downloading image is not supported")
 	return nil
 }
 
@@ -34,7 +35,8 @@ func (a *Artifact) State(name string) interface{} {
 }
 
 func (a *Artifact) Destroy() error {
-	log.Printf("Destroying image: %s", a.imageName)
+	//log.Printf("Destroying image: %s", a.imageName)
 	// TODO: implement
+	log.Fatal("Destroying image is not supported")
 	return nil
 }
