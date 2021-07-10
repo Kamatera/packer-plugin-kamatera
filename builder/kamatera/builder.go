@@ -21,8 +21,6 @@ type Builder struct {
 	kamateraClient *httpclient.Kamatera
 }
 
-var pluginVersion = "1.0.0"
-
 func (b *Builder) ConfigSpec() hcldec.ObjectSpec { return b.config.FlatMapstructure().HCL2Spec() }
 
 func (b *Builder) Prepare(raws ...interface{}) ([]string, []string, error) {
