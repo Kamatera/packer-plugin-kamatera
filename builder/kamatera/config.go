@@ -97,7 +97,7 @@ func (c *Config) Prepare(raws ...interface{}) ([]string, error) {
 	}
 
 	if c.Datacenter == "" {
-		c.Datacenter = defaultServerOption.Datacenter
+		errs = packersdk.MultiErrorAppend(errs, errors.New("datacenter must be specified"))
 	}
 	if c.CPU == "" {
 		c.CPU = defaultServerOption.CPU
