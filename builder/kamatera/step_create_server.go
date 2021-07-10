@@ -8,6 +8,7 @@ import (
 
 	"github.com/hashicorp/packer-plugin-sdk/multistep"
 	packersdk "github.com/hashicorp/packer-plugin-sdk/packer"
+	"github.com/hashicorp/packer-plugin-sdk/uuid"
 
 	"packer-plugin-kamatera/httpclient"
 )
@@ -36,6 +37,7 @@ var defaultServerOption = struct {
 	Image          string `json:"image"`
 	CPU            string `json:"cpu"`
 	RAM            string `json:"ram"`
+	Password       string `json:"password"`
 	Disk           string `json:"disk"`
 	DailyBackup    string `json:"dailybackup"`
 	Managed        string `json:"managed"`
@@ -48,6 +50,7 @@ var defaultServerOption = struct {
 	"ubuntu_server_18.04_64-bit",
 	"1A",
 	"1024",
+	"__generate__",
 	"size=10",
 	"no",
 	"no",
@@ -71,14 +74,14 @@ func (s *stepCreateServer) Run(ctx context.Context, state multistep.StateBag) mu
 	ui.Say("Creating server ...")
 
 	values := createServerPostValues{
-		Name:             c.ServerName,
+		Name:             fmt.Sprintf("packer-%s", uuid.TimeOrderedUUID())[:40],
 		SSHKey:           pubKey,
 		Datacenter:       c.Datacenter,
 		Image:            c.Image,
 		CPU:              c.CPU,
 		RAM:              c.RAM,
-		Password:         c.Password,
-		PasswordValidate: c.Password,
+		Password:         defaultServerOption.Password,
+		PasswordValidate: defaultServerOption.Password,
 		Disk:             c.Disk,
 		DailyBackup:      defaultServerOption.DailyBackup,
 		Managed:          defaultServerOption.Managed,
@@ -140,9 +143,6 @@ func (s *stepCreateServer) Run(ctx context.Context, state multistep.StateBag) mu
 		return multistep.ActionHalt
 	}
 
-	if c.ServerName != createdServerName {
-		ui.Say(fmt.Sprintf("different server created by cloud provider, expected %v, got %v", c.ServerName, createdServerName))
-	}
 	state.Put("server_name", createdServerName)
 
 	//result, err = kamateraClient.Request("POST", "service/server/ssh", struct {

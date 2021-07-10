@@ -14,7 +14,6 @@ import (
 	packersdk "github.com/hashicorp/packer-plugin-sdk/packer"
 	"github.com/hashicorp/packer-plugin-sdk/template/config"
 	"github.com/hashicorp/packer-plugin-sdk/template/interpolate"
-	"github.com/hashicorp/packer-plugin-sdk/uuid"
 	"github.com/mitchellh/mapstructure"
 )
 
@@ -28,12 +27,10 @@ type Config struct {
 
 	PollInterval time.Duration `mapstructure:"poll_interval"`
 
-	ServerName string `mapstructure:"server_name"`
 	Datacenter string `mapstructure:"datacenter"`
 	CPU        string `mapstructure:"cpu"`
 	RAM        string `mapstructure:"ram"`
 	Image      string `mapstructure:"image"`
-	Password   string `mapstructure:"password"`
 	Disk       string `mapstructure:"disk"`
 
 	ImageName string `mapstructure:"image_name"`
@@ -85,14 +82,6 @@ func (c *Config) Prepare(raws ...interface{}) ([]string, error) {
 		c.ImageName = def
 	}
 
-	if c.ServerName == "" {
-		// Default to packer-[time-ordered-uuid]
-		c.ServerName = fmt.Sprintf("packer-%s", uuid.TimeOrderedUUID())
-		if len(c.ServerName) > 40 {
-			c.ServerName = c.ServerName[:40]
-		}
-	}
-
 	var errs *packersdk.MultiError
 	if es := c.Comm.Prepare(&c.ctx); len(es) > 0 {
 		errs = packersdk.MultiErrorAppend(errs, es...)
@@ -118,9 +107,6 @@ func (c *Config) Prepare(raws ...interface{}) ([]string, error) {
 	}
 	if c.Image == "" {
 		c.Image = defaultServerOption.Image
-	}
-	if c.Password == "" {
-		c.Password = "__generate__"
 	}
 	if c.Disk == "" {
 		c.Disk = defaultServerOption.Disk
