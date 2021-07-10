@@ -36,7 +36,7 @@ type Config struct {
 	Password   string `mapstructure:"password"`
 	Disk       string `mapstructure:"disk"`
 
-	SnapshotName string `mapstructure:"snapshot_name"`
+	ImageName string `mapstructure:"image_name"`
 
 	ctx interpolate.Context
 }
@@ -76,13 +76,13 @@ func (c *Config) Prepare(raws ...interface{}) ([]string, error) {
 		c.PollInterval = 500 * time.Millisecond
 	}
 
-	if c.SnapshotName == "" {
+	if c.ImageName == "" {
 		def, err := interpolate.Render("packer-{{timestamp}}", nil)
 		if err != nil {
 			panic(err)
 		}
 		// Default to packer-{{ unix timestamp (utc) }}
-		c.SnapshotName = def
+		c.ImageName = def
 	}
 
 	if c.ServerName == "" {

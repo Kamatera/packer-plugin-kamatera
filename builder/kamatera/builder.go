@@ -61,7 +61,7 @@ func (b *Builder) Run(ctx context.Context, ui packersdk.Ui, hook packersdk.Hook)
 		},
 		&stepGetHduuid{},
 		&stepPowerOffServer{},
-		&stepCreateSnapshot{},
+		&stepCreateImage{},
 	}
 	// Run the steps
 	b.runner = commonsteps.NewRunner(steps, b.config.PackerConfig, ui)
@@ -71,13 +71,13 @@ func (b *Builder) Run(ctx context.Context, ui packersdk.Ui, hook packersdk.Hook)
 		return nil, rawErr.(error)
 	}
 
-	if _, ok := state.GetOk("snapshot_name"); !ok {
+	if _, ok := state.GetOk("image_name"); !ok {
 		return nil, nil
 	}
 
 	artifact := &Artifact{
-		snapshotName: state.Get("snapshot_name").(string),
-		StateData:    map[string]interface{}{"generated_data": state.Get("generated_data")},
+		imageName: state.Get("image_name").(string),
+		StateData: map[string]interface{}{"generated_data": state.Get("generated_data")},
 	}
 
 	return artifact, nil

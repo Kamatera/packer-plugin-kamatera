@@ -33,7 +33,7 @@ Run `packer init` to install the plugin.
 
 ### Optional:
 
-- `snapshot_name` (string) - The name of the resulting image that will appear in your Kamatera hard disk library. Defaults to `packer-{{timestamp}}`.
+- `image_name` (string) - The name of the resulting image that will appear in your Kamatera hard disk library. Defaults to `packer-{{timestamp}}`.
 - `cpu` (string) - The cpu assigned to the server. Default to `1A`.
 - `ram` (string) - The ram assigned to the server. Default to `1024`.
 - `image` (string) - The image used by the server. Default to `ubuntu_server_18.04_64-bit`.
@@ -63,7 +63,7 @@ packer {
 source "kamatera" "ubuntu" {
   datacenter = "EU"
   ssh_username = "root"
-  snapshot_name = "ubuntu-example-packer-image"
+  image_name = "ubuntu-example-packer-image"
 }
 
 build {
