@@ -1,11 +1,11 @@
-//packer {
-//  required_plugins {
-//    kamatera = {
-//      version = ">=v0.1.0"
-//      source  = "github.com/Kamatera/kamatera"
-//    }
-//  }
-//}
+packer {
+  required_plugins {
+    kamatera = {
+      version = ">=v0.3.2"
+      source  = "github.com/Kamatera/kamatera"
+    }
+  }
+}
 
 source "kamatera" "test" {
   # api_client_id = ""
