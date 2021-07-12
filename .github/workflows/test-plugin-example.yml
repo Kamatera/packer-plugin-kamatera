@@ -33,6 +33,8 @@ jobs:
           command: validate
         env:
           PACKER_LOG: ${{ github.event.inputs.logs }}
+          KAMATERA_API_CLIENT_ID: ${{ secrets.KAMATERA_API_CLIENT_ID }}
+          KAMATERA_API_SECRET: ${{ secrets.KAMATERA_API_SECRET }}
 
       - name: Build
         uses: hashicorp/packer-github-actions@master
