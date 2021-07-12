@@ -13,7 +13,7 @@ Add the following code into your Packer configuration file:
 packer {
   required_plugins {
     kamatera = {
-      version = ">= 0.1.6"
+      version = ">= 0.3.3"
       source  = "github.com/kamatera/kamatera"
     }
   }
@@ -54,7 +54,7 @@ Create a new directory named `packer_tutorial` and paste the following configura
 packer {
   required_plugins {
     kamatera = {
-      version = ">= 0.1.6"
+      version = ">= 0.3.3"
       source  = "github.com/kamatera/kamatera"
     }
   }
