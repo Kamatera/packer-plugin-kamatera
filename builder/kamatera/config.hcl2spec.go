@@ -71,14 +71,12 @@ type FlatConfig struct {
 	ApiClientID               *string           `mapstructure:"api_client_id" cty:"api_client_id" hcl:"api_client_id"`
 	ApiSecret                 *string           `mapstructure:"api_secret" cty:"api_secret" hcl:"api_secret"`
 	PollInterval              *string           `mapstructure:"poll_interval" cty:"poll_interval" hcl:"poll_interval"`
-	ServerName                *string           `mapstructure:"server_name" cty:"server_name" hcl:"server_name"`
 	Datacenter                *string           `mapstructure:"datacenter" cty:"datacenter" hcl:"datacenter"`
 	CPU                       *string           `mapstructure:"cpu" cty:"cpu" hcl:"cpu"`
 	RAM                       *string           `mapstructure:"ram" cty:"ram" hcl:"ram"`
 	Image                     *string           `mapstructure:"image" cty:"image" hcl:"image"`
-	Password                  *string           `mapstructure:"password" cty:"password" hcl:"password"`
 	Disk                      *string           `mapstructure:"disk" cty:"disk" hcl:"disk"`
-	SnapshotName              *string           `mapstructure:"snapshot_name" cty:"snapshot_name" hcl:"snapshot_name"`
+	ImageName                 *string           `mapstructure:"image_name" cty:"image_name" hcl:"image_name"`
 }
 
 // FlatMapstructure returns a new FlatConfig.
@@ -154,14 +152,12 @@ func (*FlatConfig) HCL2Spec() map[string]hcldec.Spec {
 		"api_client_id":                &hcldec.AttrSpec{Name: "api_client_id", Type: cty.String, Required: false},
 		"api_secret":                   &hcldec.AttrSpec{Name: "api_secret", Type: cty.String, Required: false},
 		"poll_interval":                &hcldec.AttrSpec{Name: "poll_interval", Type: cty.String, Required: false},
-		"server_name":                  &hcldec.AttrSpec{Name: "server_name", Type: cty.String, Required: false},
 		"datacenter":                   &hcldec.AttrSpec{Name: "datacenter", Type: cty.String, Required: false},
 		"cpu":                          &hcldec.AttrSpec{Name: "cpu", Type: cty.String, Required: false},
 		"ram":                          &hcldec.AttrSpec{Name: "ram", Type: cty.String, Required: false},
 		"image":                        &hcldec.AttrSpec{Name: "image", Type: cty.String, Required: false},
-		"password":                     &hcldec.AttrSpec{Name: "password", Type: cty.String, Required: false},
 		"disk":                         &hcldec.AttrSpec{Name: "disk", Type: cty.String, Required: false},
-		"snapshot_name":                &hcldec.AttrSpec{Name: "snapshot_name", Type: cty.String, Required: false},
+		"image_name":                   &hcldec.AttrSpec{Name: "image_name", Type: cty.String, Required: false},
 	}
 	return s
 }

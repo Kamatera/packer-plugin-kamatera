@@ -6,7 +6,7 @@ import (
 )
 
 type Artifact struct {
-	snapshotName string
+	imageName string
 
 	// StateData should store data such as GeneratedData
 	// to be shared with post-processors
@@ -18,15 +18,16 @@ func (*Artifact) BuilderId() string {
 }
 
 func (*Artifact) Files() []string {
+	log.Fatal("Downloading image is not supported")
 	return nil
 }
 
 func (a *Artifact) Id() string {
-	return a.snapshotName
+	return a.imageName
 }
 
 func (a *Artifact) String() string {
-	return fmt.Sprintf("A snapshot was created: '%v'", a.snapshotName)
+	return fmt.Sprintf("A image was created: '%v'", a.imageName)
 }
 
 func (a *Artifact) State(name string) interface{} {
@@ -34,8 +35,8 @@ func (a *Artifact) State(name string) interface{} {
 }
 
 func (a *Artifact) Destroy() error {
-	log.Printf("Destroying image: %s", a.snapshotName)
+	//log.Printf("Destroying image: %s", a.imageName)
 	// TODO: implement
-	//_, err := a.hcloudClient.Image.Delete(context.TODO(), &hcloud.Image{ID: a.snapshotId})
+	log.Fatal("Destroying image is not supported")
 	return nil
 }

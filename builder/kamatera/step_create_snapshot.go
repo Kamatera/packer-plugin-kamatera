@@ -11,16 +11,16 @@ import (
 	"packer-plugin-kamatera/httpclient"
 )
 
-type stepCreateSnapshot struct {
+type stepCreateImage struct {
 }
 
-func (s *stepCreateSnapshot) Run(ctx context.Context, state multistep.StateBag) multistep.StepAction {
+func (s *stepCreateImage) Run(ctx context.Context, state multistep.StateBag) multistep.StepAction {
 	kamateraClient := state.Get("kamateraClient").(*httpclient.Kamatera)
 
 	ui := state.Get("ui").(packersdk.Ui)
 	c := state.Get("config").(*Config)
 
-	ui.Say("Creating snapshot ...")
+	ui.Say("Creating image ...")
 
 	res, err := kamateraClient.Request("POST", "server/hdlib", struct {
 		Name      string `json:"name"`
@@ -29,7 +29,7 @@ func (s *stepCreateSnapshot) Run(ctx context.Context, state multistep.StateBag) 
 	}{
 		state.Get("server_name").(string),
 		state.Get("hduuid").(string),
-		c.SnapshotName,
+		c.ImageName,
 	})
 	if err != nil {
 		state.Put("error", err)
@@ -50,12 +50,12 @@ func (s *stepCreateSnapshot) Run(ctx context.Context, state multistep.StateBag) 
 		return multistep.ActionHalt
 	}
 
-	ui.Say(fmt.Sprintf("snapshot: %s", c.SnapshotName))
-	state.Put("snapshot_name", c.SnapshotName)
+	ui.Say(fmt.Sprintf("image: %s", c.ImageName))
+	state.Put("image_name", c.ImageName)
 
 	return multistep.ActionContinue
 }
 
-func (s *stepCreateSnapshot) Cleanup(state multistep.StateBag) {
+func (s *stepCreateImage) Cleanup(state multistep.StateBag) {
 
 }

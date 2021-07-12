@@ -13,13 +13,11 @@ source "kamatera" "test" {
 
   ssh_username = "root"
 
-  //  server_name = "packer_test"
-  //  datacenter = "IL"
+  datacenter = "IL"
   //  cpu = "1A"
   //  ram = "1024"
   //  image = "ubuntu_server_18.04_64-bit"
-  //  password = "__generate__"
-  //  snapshot_name =
+  //  image_name =
 }
 
 build {
