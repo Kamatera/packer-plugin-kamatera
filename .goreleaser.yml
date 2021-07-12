@@ -13,6 +13,7 @@ before:
 builds:
   # A separated build to run the packer-plugins-check only once for a linux_amd64 binary
 ####### start comment: disable plugins-check, see https://github.com/hashicorp/packer/issues/11140 #########
+####### also, see related commented block below which should be uncommented if this block is uncommented ###
 #  -
 #    id: plugin-check
 #    mod_timestamp: '{{ .CommitTimestamp }}'
@@ -52,8 +53,10 @@ builds:
     ignore:
       - goos: darwin
         goarch: '386'
-      - goos: linux
-        goarch: amd64
+      # commented so it builds to linux, otherwise it assumes it builds it as part of the plugin check step above
+      # if this is uncommented the comment above needs to be uncommented too
+      # - goos: linux
+      #   goarch: amd64
     binary: '{{ .ProjectName }}_v{{ .Version }}_{{ .Env.API_VERSION }}_{{ .Os }}_{{ .Arch }}'
 archives:
 - format: zip
