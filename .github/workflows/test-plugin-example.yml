@@ -1,6 +1,10 @@
 name: test plugin example
 
 on:
+  workflow_run:
+    workflows: ["release"]
+    types:
+      - completed
   workflow_dispatch:
     inputs:
       logs:
