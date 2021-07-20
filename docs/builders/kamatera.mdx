@@ -1,31 +1,18 @@
 ---
 description: >
-  The scaffolding builder is used to create endless Packer plugins using
-  a consistent plugin structure.
+  The Kamatera Packer builder builds Kamatera cloud images and adds them to the
+  account's disk library.
+
 page_title: Kamatera - Builders
 nav_title: Kamatera
 ---
 
-# Kamatera
+# Kamatera Builder
 
 Type: `kamatera`
 
-## Configuration Reference
-
-### Required Builder Configuration options:
-
-- `api_secret` (string) - The Kamatera API secret to use. It can also be specified via environment variable `KAMATERA_API_SECRET`.
-- `api_client_id` (string) - The Kamatera API client ID to use. It can also be specified via environment variable `KAMATERA_API_CLIENT_ID`.
-- `datacenter` (string) - The Kamatera datacenter to which the server is deployed.
-- `ssh_username` (string) - Must be set with a value of `root`
-
-### Optional:
-
-- `image_name` (string) - The name of the resulting image that will appear in your Kamatera hard disk library. Defaults to `packer-{{timestamp}}`.
-- `cpu` (string) - The cpu assigned to the server. Default to `1A`.
-- `ram` (string) - The ram assigned to the server. Default to `1024`.
-- `image` (string) - The image used by the server. Default to `ubuntu_server_18.04_64-bit`.
-- `disk` (string) - The disk size in GB assigned to the server. Default to `10`.
+The `kamatera` Packer builder builds [Kamatera cloud](https://www.kamatera.com/express/compute/)
+images and adds them to the account's disk library.
 
 ## Tutorial
 
@@ -89,3 +76,20 @@ Choose zone `EU` and click on MY PRIVATE IMAGES - you should see the created ima
 
 You can now create a new server from this image, SSH into that server and run `cat example.txt`.
 The output should be `FOO is hello world` - as it was generated in the provisioning script in your pkr.hcl file.
+
+## Configuration Reference
+
+### Required Builder Configuration options:
+
+- `api_secret` (string) - The Kamatera API secret to use. It can also be specified via environment variable `KAMATERA_API_SECRET`.
+- `api_client_id` (string) - The Kamatera API client ID to use. It can also be specified via environment variable `KAMATERA_API_CLIENT_ID`.
+- `datacenter` (string) - The Kamatera datacenter to which the server is deployed.
+- `ssh_username` (string) - Must be set with a value of `root`
+
+### Optional:
+
+- `image_name` (string) - The name of the resulting image that will appear in your Kamatera hard disk library. Defaults to `packer-{{timestamp}}`.
+- `cpu` (string) - The cpu assigned to the server. Default to `1A`.
+- `ram` (string) - The ram assigned to the server. Default to `1024`.
+- `image` (string) - The image used by the server. Default to `ubuntu_server_18.04_64-bit`.
+- `disk` (string) - The disk size in GB assigned to the server. Default to `10`.
