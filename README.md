@@ -22,3 +22,7 @@ packer {
 
 Run `packer init` to install the plugin.
 
+## Usage
+
+* [configuration reference](https://github.com/Kamatera/packer-plugin-kamatera/blob/main/docs/builders/kamatera.mdx#configuration-reference)
+* [tutorial](https://github.com/Kamatera/packer-plugin-kamatera/blob/main/docs/builders/kamatera.mdx#tutorial)
