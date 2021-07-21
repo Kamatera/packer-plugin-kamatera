@@ -14,18 +14,37 @@ Type: `kamatera`
 The `kamatera` Packer builder builds [Kamatera cloud](https://www.kamatera.com/express/compute/)
 images and adds them to the account's disk library.
 
+For details on how to use the Kamatera builder please see the [Tutorial](#tutorial) below.
+
+## Configuration Reference
+
+### Required Builder Configuration options:
+
+- `api_secret` (string) - The Kamatera API secret to use. It can also be specified via environment variable `KAMATERA_API_SECRET`.
+- `api_client_id` (string) - The Kamatera API client ID to use. It can also be specified via environment variable `KAMATERA_API_CLIENT_ID`.
+- `datacenter` (string) - The Kamatera datacenter to which the server is deployed.
+- `ssh_username` (string) - Must be set with a value of `root`
+
+### Optional:
+
+- `image_name` (string) - The name of the resulting image that will appear in your Kamatera hard disk library. Defaults to `packer-{{timestamp}}`.
+- `cpu` (string) - The cpu assigned to the server. Default to `1A`.
+- `ram` (string) - The ram assigned to the server. Default to `1024`.
+- `image` (string) - The image used by the server. Default to `ubuntu_server_18.04_64-bit`.
+- `disk` (string) - The disk size in GB assigned to the server. Default to `10`.
+
 ## Tutorial
 
 Set environment variables with your Kamatera API key (you can generate an API key from the [Kamatera console](https://console.kamatera.com) -> API -> Keys):
 
-```
+```shell
 export KAMATERA_API_CLIENT_ID=
 export KAMATERA_API_SECRET=
 ```
 
 Create a new directory named `packer_tutorial` and paste the following configuration into a file named `kamatera-ubuntu.pkr.hcl`:
 
-```
+```hcl
 packer {
   required_plugins {
     kamatera = {
@@ -59,13 +78,13 @@ build {
 
 Change to the `packer_tutorial` directory and run the following commands to download the Kamatera plugin:
 
-```
+```shell
 packer init .
 ```
 
 Build the image:
 
-```
+```shell
 packer build .
 ```
 
@@ -76,20 +95,3 @@ Choose zone `EU` and click on MY PRIVATE IMAGES - you should see the created ima
 
 You can now create a new server from this image, SSH into that server and run `cat example.txt`.
 The output should be `FOO is hello world` - as it was generated in the provisioning script in your pkr.hcl file.
-
-## Configuration Reference
-
-### Required Builder Configuration options:
-
-- `api_secret` (string) - The Kamatera API secret to use. It can also be specified via environment variable `KAMATERA_API_SECRET`.
-- `api_client_id` (string) - The Kamatera API client ID to use. It can also be specified via environment variable `KAMATERA_API_CLIENT_ID`.
-- `datacenter` (string) - The Kamatera datacenter to which the server is deployed.
-- `ssh_username` (string) - Must be set with a value of `root`
-
-### Optional:
-
-- `image_name` (string) - The name of the resulting image that will appear in your Kamatera hard disk library. Defaults to `packer-{{timestamp}}`.
-- `cpu` (string) - The cpu assigned to the server. Default to `1A`.
-- `ram` (string) - The ram assigned to the server. Default to `1024`.
-- `image` (string) - The image used by the server. Default to `ubuntu_server_18.04_64-bit`.
-- `disk` (string) - The disk size in GB assigned to the server. Default to `10`.
