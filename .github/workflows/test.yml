@@ -24,4 +24,6 @@ jobs:
           PACKER_LOG: ${{ github.event.inputs.logs }}
           KAMATERA_API_CLIENT_ID: ${{ secrets.KAMATERA_API_CLIENT_ID }}
           KAMATERA_API_SECRET: ${{ secrets.KAMATERA_API_SECRET }}
-        run: make run-example
+        run: |
+          tail -n +9 example/build.pkr.hcl > example/build.pkr.hcl
+          make run-example
