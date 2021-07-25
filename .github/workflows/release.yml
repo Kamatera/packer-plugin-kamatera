@@ -26,27 +26,6 @@ jobs:
         uses: actions/setup-go@v2
         with:
           go-version: 1.16
-      
-      - name: Install 
-      - name: Validate example
-        uses: hashicorp/packer-github-actions@master
-        with:
-          working_directory: ./example
-          command: validate
-        env:
-          PACKER_LOG: ${{ github.event.inputs.logs }}
-          KAMATERA_API_CLIENT_ID: ${{ secrets.KAMATERA_API_CLIENT_ID }}
-          KAMATERA_API_SECRET: ${{ secrets.KAMATERA_API_SECRET }}
-      - name: Run example
-        uses: hashicorp/packer-github-actions@master
-        with:
-          working_directory: ./example
-          command: run-example
-        env:
-          PACKER_LOG: ${{ github.event.inputs.logs }}
-          KAMATERA_API_CLIENT_ID: ${{ secrets.KAMATERA_API_CLIENT_ID }}
-          KAMATERA_API_SECRET: ${{ secrets.KAMATERA_API_SECRET }}
-          
       - name: Describe plugin
         id: plugin_describe
         run: echo "::set-output name=api_version::$(go run . describe | jq -r '.api_version')"

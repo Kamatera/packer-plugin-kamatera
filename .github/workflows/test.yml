@@ -1,0 +1,30 @@
+name: release
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+jobs:
+  goreleaser:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Unshallow
+        run: git fetch --prune --unshallow
+      - name: Set up Go
+        uses: actions/setup-go@v2
+        with:
+          go-version: 1.16
+
+      - name: Run example
+        uses: hashicorp/packer-github-actions@master
+        with:
+          working_directory: ./example
+          command: run-example
+        env:
+          PACKER_LOG: ${{ github.event.inputs.logs }}
+          KAMATERA_API_CLIENT_ID: ${{ secrets.KAMATERA_API_CLIENT_ID }}
+          KAMATERA_API_SECRET: ${{ secrets.KAMATERA_API_SECRET }}
