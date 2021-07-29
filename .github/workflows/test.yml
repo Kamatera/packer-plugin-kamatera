@@ -22,5 +22,7 @@ jobs:
           KAMATERA_API_CLIENT_ID: ${{ secrets.KAMATERA_API_CLIENT_ID }}
           KAMATERA_API_SECRET: ${{ secrets.KAMATERA_API_SECRET }}
         run: |
-          tail -n +9 example/build.pkr.hcl > example/build.pkr.hcl
+          tail -n +9 example/build.pkr.hcl > example/build.pkr.hcl.new
+          rm -f example/build.pkr.hcl
+          mv example/build.pkr.hcl.new example/build.pkr.hcl
           make run-example
