@@ -117,7 +117,7 @@ func (s *stepCreateServer) Run(ctx context.Context, state multistep.StateBag) mu
 
 	commandID := commandIDs[0].(string)
 	ui.Say("Waiting for server to be created, this may take a while ...")
-	ui.Say(fmt.Sprintf("You can track progress in the Kamatera console web-ui (Command ID = %d)", commandID))
+	ui.Say(fmt.Sprintf("You can track progress in the Kamatera console web-ui (Command ID = %s)", commandID))
 
 	command, err := kamateraClient.WaitCommand(commandID)
 	if err != nil {
