@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
+	packersdk "github.com/hashicorp/packer-plugin-sdk/packer"
 	"net/http"
 	"time"
 
@@ -15,25 +16,35 @@ type Kamatera struct {
 	apiUrl      string
 	apiClientID string
 	apiSecret   string
+	ui          packersdk.Ui
 }
 
-func NewKamateraClient(apiUrl, apiClientID, apiSecret string) *Kamatera {
+func NewKamateraClient(apiUrl, apiClientID, apiSecret string, ui packersdk.Ui) *Kamatera {
 	return &Kamatera{
 		apiUrl:      apiUrl,
 		apiClientID: apiClientID,
 		apiSecret:   apiSecret,
+		ui:          ui,
 	}
 }
 
-func (k *Kamatera) Request(method string, path string, body interface{}) (interface{}, error) {
+func (k *Kamatera) Request(method string, path string, body interface{}, silent bool) (interface{}, error) {
+	url := fmt.Sprintf("%s/%s", k.apiUrl, path)
 	buf := new(bytes.Buffer)
-	if body != nil {
+	if body == nil {
+		if ! silent {
+			k.ui.Say(fmt.Sprintf("Kamatera Request: %s %s", method, url))
+		}
+	} else {
 		if err := json.NewEncoder(buf).Encode(body); err != nil {
 			return nil, fmt.Errorf("cannot encode body %+v", err)
 		}
+		if ! silent {
+			k.ui.Say(fmt.Sprintf("Kamatera Request: %s %s %s", method, url, buf.String()))
+		}
 	}
 
-	req, _ := http.NewRequest(method, fmt.Sprintf("%s/%s", k.apiUrl, path), buf)
+	req, _ := http.NewRequest(method, url, buf)
 	req.Header.Add("AuthClientId", k.apiClientID)
 	req.Header.Add("AuthSecret", k.apiSecret)
 	req.Header.Add("Accept", "application/json")
@@ -42,7 +53,7 @@ func (k *Kamatera) Request(method string, path string, body interface{}) (interf
 	client := cleanhttp.DefaultClient()
 	res, err := client.Do(req)
 	if err != nil {
-		return nil, fmt.Errorf("error when doing http request %+v", err)
+		return nil, err
 	}
 	defer res.Body.Close()
 
@@ -72,7 +83,7 @@ func (k *Kamatera) WaitCommand(commandID string) (map[string]interface{}, error)
 
 		time.Sleep(2 * time.Second)
 
-		result, e := k.Request("GET", fmt.Sprintf("service/queue?id=%s", commandID), nil)
+		result, e := k.Request("GET", fmt.Sprintf("service/queue?id=%s", commandID), nil, true)
 		if e != nil {
 			return nil, e
 		}

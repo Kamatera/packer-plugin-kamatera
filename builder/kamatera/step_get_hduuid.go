@@ -23,7 +23,7 @@ func (s *stepGetHduuid) Run(ctx context.Context, state multistep.StateBag) multi
 		Name string `json:"name"`
 	}{
 		state.Get("server_name").(string),
-	})
+	}, false)
 	if err != nil {
 		state.Put("error", err)
 		ui.Error(err.Error())

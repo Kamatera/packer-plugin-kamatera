@@ -32,6 +32,7 @@ type Config struct {
 	RAM        string `mapstructure:"ram"`
 	Image      string `mapstructure:"image"`
 	Disk       string `mapstructure:"disk"`
+	Script     string `mapstructure:"script"`
 
 	ImageName string `mapstructure:"image_name"`
 

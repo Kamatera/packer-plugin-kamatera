@@ -30,6 +30,7 @@ type createServerPostValues struct {
 	BillingCycle     string `json:"billingcycle"`
 	MonthlyPackage   string `json:"monthlypackage"`
 	PowerOn          string `json:"poweronaftercreate"`
+	ScriptFile       string `json:"script-file"`
 }
 
 var defaultServerOption = struct {
@@ -89,15 +90,15 @@ func (s *stepCreateServer) Run(ctx context.Context, state multistep.StateBag) mu
 		Quantity:         defaultServerOption.Quantity,
 		BillingCycle:     defaultServerOption.BillingCycle,
 		MonthlyPackage:   defaultServerOption.MonthlyPackage,
+		ScriptFile:       c.Script,
 	}
 
-	result, err := kamateraClient.Request("POST", "service/server", values)
+	result, err := kamateraClient.Request("POST", "service/server", values, false)
 	if err != nil {
 		state.Put("error", err)
 		ui.Error(err.Error())
 		return multistep.ActionHalt
 	}
-	ui.Say("Waiting creation ...")
 
 	var commandIDs []interface{}
 	if r, ok := result.([]interface{}); ok {
@@ -115,6 +116,9 @@ func (s *stepCreateServer) Run(ctx context.Context, state multistep.StateBag) mu
 	}
 
 	commandID := commandIDs[0].(string)
+	ui.Say("Waiting for server to be created, this may take a while ...")
+	ui.Say(fmt.Sprintf("You can track progress in the Kamatera console web-ui (Command ID = %d)", commandID))
+
 	command, err := kamateraClient.WaitCommand(commandID)
 	if err != nil {
 		state.Put("error", err)
@@ -129,6 +133,7 @@ func (s *stepCreateServer) Run(ctx context.Context, state multistep.StateBag) mu
 		ui.Error(err.Error())
 		return multistep.ActionHalt
 	}
+	ui.Say(fmt.Sprintf("Temporary server creation log: %s", createLog.(string)))
 
 	createdServerName := ""
 	for _, line := range strings.Split(createLog.(string), "\n") {
@@ -142,6 +147,7 @@ func (s *stepCreateServer) Run(ctx context.Context, state multistep.StateBag) mu
 		ui.Error(err.Error())
 		return multistep.ActionHalt
 	}
+	ui.Say(fmt.Sprintf("Temporary server name: %s", createdServerName))
 
 	state.Put("server_name", createdServerName)
 
@@ -149,7 +155,7 @@ func (s *stepCreateServer) Run(ctx context.Context, state multistep.StateBag) mu
 		Name string `json:"name"`
 	}{
 		createdServerName,
-	})
+	}, false)
 	if err != nil {
 		state.Put("error", err)
 		ui.Error(err.Error())
@@ -164,6 +170,8 @@ func (s *stepCreateServer) Run(ctx context.Context, state multistep.StateBag) mu
 	}
 	server := servers[0].(map[string]interface{})
 	state.Put("server_ip", server["externalIp"].(string))
+
+	ui.Say("Temporary server IP: " + server["externalIp"].(string))
 
 	return multistep.ActionContinue
 }
@@ -186,7 +194,7 @@ func (s *stepCreateServer) Cleanup(state multistep.StateBag) {
 	}{
 		serverName.(string),
 		true,
-	})
+	}, false)
 	if err != nil {
 		ui.Error(fmt.Sprintf(
 			"Error destroying server. Please destroy it manually: %s", err))

@@ -14,6 +14,14 @@ Type: `kamatera`
 The `kamatera` Packer builder builds [Kamatera cloud](https://www.kamatera.com/express/compute/)
 images and adds them to the account's disk library.
 
+The builder process is as follows:
+
+1. Create a temporary Kamatera server according to the builder configuration
+2. Establish SSH connection to the server
+3. Run provisioners
+4. Create a Kamatera hard disk image from the server
+5. Poweroff and terminate the server
+
 For details on how to use the Kamatera builder please see the [Tutorial](#tutorial) below.
 
 ## Configuration Reference
@@ -28,10 +36,11 @@ For details on how to use the Kamatera builder please see the [Tutorial](#tutori
 ### Optional:
 
 - `image_name` (string) - The name of the resulting image that will appear in your Kamatera hard disk library. Defaults to `packer-{{timestamp}}`.
-- `cpu` (string) - The cpu assigned to the server. Default to `1A`.
-- `ram` (string) - The ram assigned to the server. Default to `1024`.
-- `image` (string) - The image used by the server. Default to `ubuntu_server_18.04_64-bit`.
-- `disk` (string) - The disk size in GB assigned to the server. Default to `10`.
+- `cpu` (string) - The cpu assigned to the temporary server. Default to `1A`.
+- `ram` (string) - The ram assigned to the temporary server. Default to `1024`.
+- `image` (string) - The image used by the temporary server. Default to `ubuntu_server_18.04_64-bit`.
+- `disk` (string) - The disk size in GB assigned to the temporary server. Default to `10`.
+- `script` (string) - Script to run for provisioning the server - Bash for linux images, Powershell for windows images.
 
 ## Tutorial
 
@@ -48,7 +57,7 @@ Create a new directory named `packer_tutorial` and paste the following configura
 packer {
   required_plugins {
     kamatera = {
-      version = ">= 0.3.3"
+      version = ">= 0.5.0"
       source  = "github.com/kamatera/kamatera"
     }
   }
@@ -58,21 +67,16 @@ source "kamatera" "ubuntu" {
   datacenter = "EU"
   ssh_username = "root"
   image_name = "ubuntu-example-packer-image"
+  script = <<-EOF
+    echo Creating example.txt &&\
+    echo "Hello World" > example.txt
+  EOF
 }
 
 build {
   sources = [
     "source.kamatera.ubuntu"
   ]
-  provisioner "shell" {
-    environment_vars = [
-      "FOO=hello world",
-    ]
-    inline = [
-      "echo Creating example.txt",
-      "echo \"FOO is $FOO\" > example.txt",
-    ]
-  }
 }
 ```
 
@@ -94,4 +98,3 @@ When done, log-in to [Kamatera console](https://console.kamatera.com) and naviga
 Choose zone `EU` and click on MY PRIVATE IMAGES - you should see the created image there.
 
 You can now create a new server from this image, SSH into that server and run `cat example.txt`.
-The output should be `FOO is hello world` - as it was generated in the provisioning script in your pkr.hcl file.

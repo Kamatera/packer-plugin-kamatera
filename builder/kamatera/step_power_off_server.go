@@ -25,7 +25,7 @@ func (s *stepPowerOffServer) Run(ctx context.Context, state multistep.StateBag) 
 		Name string `json:"name"`
 	}{
 		serverName,
-	})
+	}, false)
 	if err != nil {
 		err := fmt.Errorf("error power off server: %v", err)
 		ui.Error(err.Error())

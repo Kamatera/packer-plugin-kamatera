@@ -33,7 +33,7 @@ func (b *Builder) Prepare(raws ...interface{}) ([]string, []string, error) {
 }
 
 func (b *Builder) Run(ctx context.Context, ui packersdk.Ui, hook packersdk.Hook) (packersdk.Artifact, error) {
-	b.kamateraClient = httpclient.NewKamateraClient(b.config.ApiUrl, b.config.ApiClientID, b.config.ApiSecret)
+	b.kamateraClient = httpclient.NewKamateraClient(b.config.ApiUrl, b.config.ApiClientID, b.config.ApiSecret, ui)
 	// Set up the state
 	state := new(multistep.BasicStateBag)
 	state.Put("config", &b.config)

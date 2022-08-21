@@ -30,7 +30,7 @@ func (s *stepCreateImage) Run(ctx context.Context, state multistep.StateBag) mul
 		state.Get("server_name").(string),
 		state.Get("hduuid").(string),
 		c.ImageName,
-	})
+	}, false)
 	if err != nil {
 		state.Put("error", err)
 		ui.Error(err.Error())
