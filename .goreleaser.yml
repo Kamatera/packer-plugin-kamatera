@@ -53,6 +53,8 @@ builds:
     ignore:
       - goos: darwin
         goarch: '386'
+      - goos: windows
+        goarch: arm64
       # commented so it builds to linux, otherwise it assumes it builds it as part of the plugin check step above
       # if this is uncommented the comment above needs to be uncommented too
       # - goos: linux
