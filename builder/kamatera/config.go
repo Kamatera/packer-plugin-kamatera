@@ -33,6 +33,7 @@ type Config struct {
 	Image      string `mapstructure:"image"`
 	Disk       string `mapstructure:"disk"`
 	Script     string `mapstructure:"script"`
+	DisableSsh bool   `mapstructure:"disable_ssh"`
 
 	ImageName string `mapstructure:"image_name"`
 

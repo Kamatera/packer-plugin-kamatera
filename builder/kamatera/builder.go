@@ -41,26 +41,38 @@ func (b *Builder) Run(ctx context.Context, ui packersdk.Ui, hook packersdk.Hook)
 	state.Put("hook", hook)
 	state.Put("ui", ui)
 
-	// Build the steps
-	steps := []multistep.Step{
-		&stepCreateSSHKey{
-			Debug:        b.config.PackerDebug,
-			DebugKeyPath: fmt.Sprintf("ssh_key_%s.pem", b.config.PackerBuildName),
-		},
-		&stepCreateServer{},
-		&communicator.StepConnect{
-			Config:    &b.config.Comm,
-			Host:      getServerIP,
-			SSHConfig: b.config.Comm.SSHConfigFunc(),
-		},
-		&commonsteps.StepProvision{},
-		&commonsteps.StepCleanupTempKeys{
-			Comm: &b.config.Comm,
-		},
+	if b.config.DisableSsh {
+		ui.Say("SSH has been disabled. Provisioning steps will not run.")
+	}
+
+	var steps []multistep.Step
+	if ! b.config.DisableSsh {
+		steps = append(steps,
+			&stepCreateSSHKey{
+				Debug:        b.config.PackerDebug,
+				DebugKeyPath: fmt.Sprintf("ssh_key_%s.pem", b.config.PackerBuildName),
+			},
+		)
+	}
+	steps = append(steps, &stepCreateServer{})
+	if ! b.config.DisableSsh {
+		steps = append(steps,
+			&communicator.StepConnect{
+				Config:    &b.config.Comm,
+				Host:      getServerIP,
+				SSHConfig: b.config.Comm.SSHConfigFunc(),
+			},
+			&commonsteps.StepProvision{},
+			&commonsteps.StepCleanupTempKeys{
+				Comm: &b.config.Comm,
+			},
+		)
+	}
+	steps = append(steps,
 		&stepGetHduuid{},
 		&stepPowerOffServer{},
 		&stepCreateImage{},
-	}
+	)
 	// Run the steps
 	b.runner = commonsteps.NewRunner(steps, b.config.PackerConfig, ui)
 	b.runner.Run(ctx, state)

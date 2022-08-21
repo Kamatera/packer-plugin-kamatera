@@ -69,7 +69,10 @@ func (s *stepCreateServer) Run(ctx context.Context, state multistep.StateBag) mu
 
 	ui := state.Get("ui").(packersdk.Ui)
 	c := state.Get("config").(*Config)
-	pubKey := state.Get("public_key").(string)
+	pubKey := ""
+	if ! c.DisableSsh {
+		pubKey = state.Get("public_key").(string)
+	}
 
 	// Create the server based on configuration
 	ui.Say("Creating server ...")

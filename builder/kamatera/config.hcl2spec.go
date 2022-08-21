@@ -77,6 +77,7 @@ type FlatConfig struct {
 	Image                     *string           `mapstructure:"image" cty:"image" hcl:"image"`
 	Disk                      *string           `mapstructure:"disk" cty:"disk" hcl:"disk"`
 	Script                    *string           `mapstructure:"script" cty:"script" hcl:"script"`
+	DisableSsh                *bool           `mapstructure:"disable_ssh" cty:"disable_ssh" hcl:"disable_ssh"`
 	ImageName                 *string           `mapstructure:"image_name" cty:"image_name" hcl:"image_name"`
 }
 
@@ -159,6 +160,7 @@ func (*FlatConfig) HCL2Spec() map[string]hcldec.Spec {
 		"image":                        &hcldec.AttrSpec{Name: "image", Type: cty.String, Required: false},
 		"disk":                         &hcldec.AttrSpec{Name: "disk", Type: cty.String, Required: false},
 		"script":                       &hcldec.AttrSpec{Name: "script", Type: cty.String, Required: false},
+		"disable_ssh":                  &hcldec.AttrSpec{Name: "disable_ssh", Type: cty.Bool, Required: false},
 		"image_name":                   &hcldec.AttrSpec{Name: "image_name", Type: cty.String, Required: false},
 	}
 	return s
