@@ -3,7 +3,7 @@
 integration {
   name = "Kamatera"
   description = "TODO"
-  identifier = "packer/BrandonRomano/kamatera"
+  identifier = "packer/Kamatera/kamatera"
   component {
     type = "builder"
     name = "Kamatera"
