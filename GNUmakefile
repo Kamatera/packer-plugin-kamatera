@@ -13,11 +13,10 @@ build:
 generate:
 	@go install github.com/hashicorp/packer-plugin-sdk/cmd/packer-sdc@latest
 	@go generate -v ./...
-
-ci-release-docs:
-	@go install github.com/hashicorp/packer-plugin-sdk/cmd/packer-sdc@latest
-	@packer-sdc renderdocs -src docs -partials docs-partials/ -dst docs/
-	@/bin/sh -c "[ -d docs ] && zip -r docs.zip docs/"
+	@if [ -d ".docs" ]; then rm -r ".docs"; fi
+	@packer-sdc renderdocs -src "docs" -partials docs-partials/ -dst ".docs/"
+	@./.web-docs/scripts/compile-to-webdocs.sh "." ".docs" ".web-docs" "Kamatera"
+	@rm -r ".docs"
 
 dev: build
 	@mkdir -p ~/.packer.d/plugins/
@@ -34,9 +33,3 @@ install-packer-sdc: ## Install packer sofware development command
 
 testacc: dev
 	@PACKER_ACC=1 go test -count $(COUNT) -v $(TEST) -timeout=120m
-
-build-docs: install-packer-sdc
-	@if [ -d ".docs" ]; then rm -r ".docs"; fi
-	@packer-sdc renderdocs -src "docs" -partials docs-partials/ -dst ".docs/"
-	@./.web-docs/scripts/compile-to-webdocs.sh "." ".docs" ".web-docs" "Kamatera"
-	@rm -r ".docs"
