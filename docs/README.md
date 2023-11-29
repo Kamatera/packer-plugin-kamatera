@@ -26,4 +26,4 @@ $ packer plugins install github.com/kamatera/kamatera
 
 #### Builders
 
-- [kamatera](/packer/integrations/kamatera/latest/components/builder/kamatera) - The builder builds Kamatera images.
+- [kamatera](/packer/integrations/kamatera/kamatera/latest/components/builder/kamatera) - The builder builds Kamatera images.
