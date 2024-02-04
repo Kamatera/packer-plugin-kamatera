@@ -77,7 +77,7 @@ type FlatConfig struct {
 	Image                     *string           `mapstructure:"image" cty:"image" hcl:"image"`
 	Disk                      *string           `mapstructure:"disk" cty:"disk" hcl:"disk"`
 	Script                    *string           `mapstructure:"script" cty:"script" hcl:"script"`
-	DisableSsh                *bool           `mapstructure:"disable_ssh" cty:"disable_ssh" hcl:"disable_ssh"`
+	DisableSsh                *bool             `mapstructure:"disable_ssh" cty:"disable_ssh" hcl:"disable_ssh"`
 	ImageName                 *string           `mapstructure:"image_name" cty:"image_name" hcl:"image_name"`
 }
 
