@@ -13,7 +13,7 @@ name: release
 on:
   push:
     tags:
-      - 'v*'
+      - '*.*.*'
 jobs:
   goreleaser:
     runs-on: ubuntu-latest
@@ -44,3 +44,16 @@ jobs:
           GPG_FINGERPRINT: ${{ steps.import_gpg.outputs.fingerprint }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           API_VERSION: ${{ steps.plugin_describe.outputs.api_version }}
+      - name: Checkout integration-release-action
+        uses: actions/checkout@8e5e7e5ab8b370d6c329ec480221332ada57f0ab # v3.5.2
+        with:
+          repository: OriHoch/integration-release-action
+          ref: patch-1
+          path: ./integration-release-action
+      - name: Notify Release
+        uses: ./integration-release-action
+        with:
+          integration_identifier: "packer/Kamatera/kamatera"
+          release_version: ${{ github.ref_name }}
+          release_sha: ${{ github.ref }}
+          github_token: ${{ secrets.GITHUB_TOKEN }}
