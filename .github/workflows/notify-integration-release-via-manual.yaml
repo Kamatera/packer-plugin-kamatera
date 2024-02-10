@@ -39,7 +39,7 @@ jobs:
         with:
 #          repository: hashicorp/integration-release-action
           repository: OriHoch/integration-release-action
-          branch: patch-1
+          ref: patch-1
           path: ./integration-release-action
       - name: Notify Release
         uses: ./integration-release-action
