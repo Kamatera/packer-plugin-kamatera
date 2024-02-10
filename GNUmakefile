@@ -18,6 +18,9 @@ generate:
 	@./.web-docs/scripts/compile-to-webdocs.sh "." ".docs" ".web-docs" "Kamatera"
 	@rm -r ".docs"
 
+ci-release-docs:
+	@/bin/sh -c "[ -d docs ] && zip -r docs.zip docs/"
+
 dev: build
 	@mkdir -p ~/.packer.d/plugins/
 	@mv ${BINARY} ~/.packer.d/plugins/${BINARY}
