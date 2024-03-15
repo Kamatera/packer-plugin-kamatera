@@ -1,5 +1,6 @@
 NAME=kamatera
 BINARY=packer-plugin-${NAME}
+PLUGIN_FQN="$(shell grep -E '^module' <go.mod | sed -E 's/module *//')"
 
 COUNT?=1
 TEST?=$(shell go list ./...)
@@ -21,9 +22,9 @@ generate:
 ci-release-docs:
 	@/bin/sh -c "[ -d docs ] && zip -r docs.zip docs/"
 
-dev: build
-	@mkdir -p ~/.packer.d/plugins/
-	@mv ${BINARY} ~/.packer.d/plugins/${BINARY}
+dev:
+	@go build -ldflags="-X '${PLUGIN_FQN}/version.VersionPrerelease=dev'" -o '${BINARY}'
+	packer plugins install --path ${BINARY} "$(shell echo "${PLUGIN_FQN}" | sed 's/packer-plugin-//')"
 
 run-example: dev
 	@packer build ./example
