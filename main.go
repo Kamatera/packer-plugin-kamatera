@@ -4,8 +4,8 @@ import (
 	"fmt"
 	"os"
 
-	"packer-plugin-kamatera/builder/kamatera"
-	"packer-plugin-kamatera/version"
+	"github.com/Kamatera/packer-plugin-kamatera/builder/kamatera"
+	"github.com/Kamatera/packer-plugin-kamatera/version"
 
 	"github.com/hashicorp/packer-plugin-sdk/plugin"
 )

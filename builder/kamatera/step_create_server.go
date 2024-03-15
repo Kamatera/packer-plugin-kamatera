@@ -10,7 +10,7 @@ import (
 	packersdk "github.com/hashicorp/packer-plugin-sdk/packer"
 	"github.com/hashicorp/packer-plugin-sdk/uuid"
 
-	"packer-plugin-kamatera/httpclient"
+	"github.com/Kamatera/packer-plugin-kamatera/httpclient"
 )
 
 type createServerPostValues struct {
@@ -70,7 +70,7 @@ func (s *stepCreateServer) Run(ctx context.Context, state multistep.StateBag) mu
 	ui := state.Get("ui").(packersdk.Ui)
 	c := state.Get("config").(*Config)
 	pubKey := ""
-	if ! c.DisableSsh {
+	if !c.DisableSsh {
 		pubKey = state.Get("public_key").(string)
 	}
 
