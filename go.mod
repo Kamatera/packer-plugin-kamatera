@@ -1,4 +1,4 @@
-module packer-plugin-kamatera
+module github.com/Kamatera/packer-plugin-kamatera
 
 go 1.16
 

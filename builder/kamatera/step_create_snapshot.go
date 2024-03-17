@@ -8,7 +8,7 @@ import (
 	"github.com/hashicorp/packer-plugin-sdk/multistep"
 	packersdk "github.com/hashicorp/packer-plugin-sdk/packer"
 
-	"packer-plugin-kamatera/httpclient"
+	"github.com/Kamatera/packer-plugin-kamatera/httpclient"
 )
 
 type stepCreateImage struct {

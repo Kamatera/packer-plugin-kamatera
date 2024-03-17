@@ -10,7 +10,7 @@ import (
 	"github.com/hashicorp/packer-plugin-sdk/multistep/commonsteps"
 	packersdk "github.com/hashicorp/packer-plugin-sdk/packer"
 
-	"packer-plugin-kamatera/httpclient"
+	"github.com/Kamatera/packer-plugin-kamatera/httpclient"
 )
 
 const BuilderId = "kamatera.builder"
@@ -46,7 +46,7 @@ func (b *Builder) Run(ctx context.Context, ui packersdk.Ui, hook packersdk.Hook)
 	}
 
 	var steps []multistep.Step
-	if ! b.config.DisableSsh {
+	if !b.config.DisableSsh {
 		steps = append(steps,
 			&stepCreateSSHKey{
 				Debug:        b.config.PackerDebug,
@@ -55,7 +55,7 @@ func (b *Builder) Run(ctx context.Context, ui packersdk.Ui, hook packersdk.Hook)
 		)
 	}
 	steps = append(steps, &stepCreateServer{})
-	if ! b.config.DisableSsh {
+	if !b.config.DisableSsh {
 		steps = append(steps,
 			&communicator.StepConnect{
 				Config:    &b.config.Comm,
